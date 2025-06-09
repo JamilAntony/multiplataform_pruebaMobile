@@ -26,7 +26,6 @@ workflows:
 
   android:
     name: Android Build Workflow
-    platform: android
     environment:
       vars:
         CUSTOM_ENV_VAR: "value"
