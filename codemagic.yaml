@@ -1,0 +1,36 @@
+workflows:
+  ios:
+    name: iOS Build Workflow
+    max_build_duration: 60
+    instance_size: mac_mini
+    platform: ios
+    environment:
+      vars:
+        CUSTOM_ENV_VAR: "value"
+    scripts:
+      - name: Install CocoaPods
+        script: |
+          curl -sSL https://get.rvm.io | bash -s stable --ruby
+          gem install cocoapods
+          pod install
+      - name: Build iOS app
+        script: |
+          ./gradlew build
+      - name: Run tests
+        script: |
+          ./gradlew test
+    artifacts:
+      - build/iosApp/build/outputs/*.ipa  # Guardar archivo IPA
+
+  android:
+    name: Android Build Workflow
+    platform: android
+    environment:
+      vars:
+        CUSTOM_ENV_VAR: "value"
+    scripts:
+      - name: Build Android app
+        script: |
+          ./gradlew clean build
+    artifacts:
+      - build/app/outputs/**/*.apk  # Guardar APK
