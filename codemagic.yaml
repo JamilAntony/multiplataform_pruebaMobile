@@ -1,26 +1,28 @@
 workflows:
   ios:
     name: iOS Build Workflow
-    max_build_duration: 60
-    instance_size: mac_mini
-    platform: ios
+    max_build_duration: 60  # Duración máxima de la construcción en minutos
     environment:
       vars:
-        CUSTOM_ENV_VAR: "value"
+        CUSTOM_ENV_VAR: "value"  # Opcional: puedes agregar variables de entorno
     scripts:
-      - name: Install CocoaPods
+      # Instalar dependencias necesarias
+      - name: Install CocoaPods and dependencies
         script: |
           curl -sSL https://get.rvm.io | bash -s stable --ruby
           gem install cocoapods
           pod install
-      - name: Build iOS app
+      # Comando para construir el proyecto
+      - name: Build the project
         script: |
           ./gradlew build
+      # Ejecución de pruebas
       - name: Run tests
         script: |
           ./gradlew test
     artifacts:
-      - build/iosApp/build/outputs/*.ipa  # Guardar archivo IPA
+      # Especifica el archivo IPA generado
+      - build/iosApp/build/outputs/*.ipa  # El archivo IPA que se generará
 
   android:
     name: Android Build Workflow
@@ -29,8 +31,9 @@ workflows:
       vars:
         CUSTOM_ENV_VAR: "value"
     scripts:
+      # Construir el proyecto Android
       - name: Build Android app
         script: |
           ./gradlew clean build
     artifacts:
-      - build/app/outputs/**/*.apk  # Guardar APK
+      - build/app/outputs/**/*.apk  # El APK generado
