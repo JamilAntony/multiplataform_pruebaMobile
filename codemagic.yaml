@@ -6,23 +6,29 @@ workflows:
       vars:
         CUSTOM_ENV_VAR: "value"  # Opcional: puedes agregar variables de entorno
     scripts:
-      # Instalar dependencias necesarias
+      # Paso 1: Instalar CocoaPods y dependencias
       - name: Install CocoaPods and dependencies
         script: |
+          # Instalar RVM (Ruby Version Manager)
           curl -sSL https://get.rvm.io | bash -s stable --ruby
-          gem install cocoapods
+          # Instalar CocoaPods (versión compatible para tu proyecto)
+          gem install cocoapods -v 1.11.2
+          # Instalar dependencias definidas en Podfile (para iOS)
           pod install
-      # Comando para construir el proyecto
-      - name: Build the project
+          
+      # Paso 2: Construir el proyecto de iOS
+      - name: Build the iOS project
         script: |
           ./gradlew build
-      # Ejecución de pruebas
+
+      # Paso 3: Ejecutar pruebas (si tienes pruebas configuradas)
       - name: Run tests
         script: |
           ./gradlew test
+
     artifacts:
-      # Especifica el archivo IPA generado
-      - build/iosApp/build/outputs/*.ipa  # El archivo IPA que se generará
+      # Guardar el archivo .ipa generado después de la compilación
+      - build/iosApp/build/outputs/*.ipa  # El archivo IPA para distribución
 
   android:
     name: Android Build Workflow
@@ -30,9 +36,11 @@ workflows:
       vars:
         CUSTOM_ENV_VAR: "value"
     scripts:
-      # Construir el proyecto Android
+      # Paso 1: Construir el proyecto Android
       - name: Build Android app
         script: |
           ./gradlew clean build
+
     artifacts:
-      - build/app/outputs/**/*.apk  # El APK generado
+      # Guardar el archivo APK generado
+      - build/app/outputs/**/*.apk  # El APK generado para Android
